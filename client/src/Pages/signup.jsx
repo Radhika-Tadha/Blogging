@@ -1,32 +1,40 @@
 // import React from "react";
 import axios from 'axios';
-import React, { useState } from 'react'; // ✅ correct
-import loginImage from '../Assets/p1.jpg'; // adjust path as needed
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import loginImage from '../Assets/p1.jpg';
 
 
 export default function SignUp(props) {
-    const [form, setForm] = useState({ name: '', email: '', password: '' });
+    const [form, setForm] = useState({ name: "", email: "", password: "" });
+    const navigate = useNavigate();
 
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value,
+        });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             //send POST request to Node.js Backend
             const res = await axios.post("http://localhost:5000/api/auth/signup", form);
             alert(res.data.message);
-        } catch (error) {
-            alert(error.response?.data?.message || "Signup failed");
+            navigate("/login");
+        } catch (err) {
+            console.error("Signup failed:", err);
+            alert(err.response?.data?.message || "Signup failed");
         }
     };
     return (
         <div>
             <>
                 <div className="container vh-100 d-flex align-items-center justify-content-center">
-                    <div className="row shadow-lg" style={{ width: "90%", maxWidth: "1000px", height: "500px" }}>
+                    <div className="row shadow-lg" style={{ width: "90%", maxWidth: "900px", height: "500px" }}>
                         {/* LEFT SIDE - IMAGE */}
                         <div className="col-md-6 d-none d-md-block p-0">
                             <img
@@ -43,18 +51,16 @@ export default function SignUp(props) {
                             <form onSubmit={handleSubmit}><br></br>
 
                                 <div className="mb-3 text-start">
-                                    {/* <label htmlFor="email" className="form-label">Email</label> */}
-                                    <input type="text" className="form-control border-0 border-bottom rounded-0 shadow-none" value={form.name} id="name" onChange={handleChange} placeholder="Enter Full Name" />
+                                    <input type="text" name="name" className="form-control border-0 border-bottom rounded-0 shadow-none" id="name" autoComplete="name" onChange={handleChange} placeholder="Enter Full Name" />
                                 </div><br></br>
 
                                 <div className="mb-3 text-start">
-                                    {/* <label htmlFor="email" className="form-label">Email</label> */}
-                                    <input type="email" className="form-control border-0 border-bottom rounded-0 shadow-none" value={form.email} id="email" onChange={handleChange} placeholder="Enter email" />
+                                    <input type="email" name="email" className="form-control border-0 border-bottom rounded-0 shadow-none" id="email" autoComplete="username" onChange={handleChange} placeholder="Enter email" />
                                 </div><br></br>
 
                                 <div className="mb-3 text-start">
-                                    {/* <label htmlFor="password" className="form-label">Password</label> */}
-                                    <input type="password" className="form-control border-0 border-bottom rounded-0 shadow-none" value={form.password} id="password" autoComplete="current-password" onChange={handleChange} placeholder="Enter password" />
+                                    <input type="password" name="password" className="form-control border-0 border-bottom rounded-0 shadow-none" id="password" autoComplete="current-password" onChange={handleChange} placeholder="Enter password" />
+
                                 </div>
 
                                 <div className="form-check text-start">
@@ -64,9 +70,9 @@ export default function SignUp(props) {
                                 <br></br>
                                 <button type="submit" className="btn btn-primary w-100">Sign Up</button>
                             </form>
-                            <p className="mt-3 text-center">
+                            {/* <p className="mt-3 text-center">
                                 Already have an account? <a href="/login" className="text-decoration-none">Go to the Login</a>
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                 </div>

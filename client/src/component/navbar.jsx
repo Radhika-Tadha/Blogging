@@ -1,10 +1,18 @@
 import React from 'react';
 // import './Navbar.css'; // optional for styling
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
-export default function Navbar(props) {
+export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+        navigate("/login");
+    };
     return (
         <div>
             <>
@@ -57,12 +65,22 @@ export default function Navbar(props) {
                                         aria-label="Search"
                                     />
                                 </div>
-                                <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
-                                    <li className="nav-item">
-                                        <Link className="nav-link active" aria-current="page" to="/login">Login</Link>
-                                    </li>
+                                <ul className="navbar-nav ms-2">
+                                    {!isLoggedIn ? (
+                                        <>
+                                            <li className="nav-item">
+                                                <Link className="nav-link" to="/Login">Login</Link>
+                                            </li>
+                                            <li className="nav-item">
+                                                <Link className="nav-link" to="/Signup">Signup</Link>
+                                            </li>
+                                        </>
+                                    ) : (
+                                        <li className="nav-item">
+                                            <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
+                                        </li>
+                                    )}
                                 </ul>
-
 
                             </form>
                         </div>
