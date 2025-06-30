@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import USER from '../Assets/user.png';
 
 
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
@@ -13,6 +14,10 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         setIsLoggedIn(false);
         navigate("/login");
     };
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userImage = user?.image || USER; // Fallback image
+
     return (
         <div>
             <>
@@ -28,7 +33,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item">
                                     <Link className="nav-link active" aria-current="page" to="/">Home</Link>
@@ -76,12 +81,22 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                                             </li>
                                         </>
                                     ) : (
-                                        <li className="nav-item">
-                                            <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
-                                        </li>
+                                        <>
+                                            <li className="nav-item">
+                                                <Link className="nav-link" onClick={handleLogout}>Logout</Link>
+                                            </li>
+                                            <li className="nav-item ms-2">
+                                                <span className="border border-light rounded-circle d-inline-block overflow-hidden" style={{ width: '40px', height: '40px' }} onClick={() => navigate("/profile")}>
+                                                    <img src={userImage} // Replace with actual path
+                                                        alt="User"
+                                                        className="img-fluid w-100 h-100"
+                                                        style={{ objectFit: 'cover' }}
+                                                    />
+                                                </span>
+                                            </li>
+                                        </>
                                     )}
                                 </ul>
-
                             </form>
                         </div>
                     </div>

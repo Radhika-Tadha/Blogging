@@ -27,6 +27,7 @@ export default function Login({setIsLoggedIn}) {
             const res = await axios.post("http://localhost:5000/api/auth/login", form);
             // Optional: Save token if backend returns it
             localStorage.setItem("token", res.data.token);
+            localStorage.setItem("user", JSON.stringify(res.data.user)); // ✅ user added
             alert(res.data.message);
             setIsLoggedIn(true); // Update navbar
             navigate("/dashboard");

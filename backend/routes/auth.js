@@ -49,12 +49,46 @@ router.post('/login', async (req, res) => {
         if (!isMatch)
             return res.status(400).json({ message: "Correct Your Password" });
 
+        //iside your login controller
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-        res.json({ message: "login Success", token });
+        res.json({
+            message: "login Success", token,
+            user, user: {
+                name: user.name,
+                email: user.email,
+                _id: user._id
+            }
+        });
 
     } catch (err) {
         console.error("login failed:", err);
         return res.status(500).json({ message: 'internal server error' });
+    }
+});
+
+// Protect route using token
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // user ID from token
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid token" });
+  }
+};
+
+// ✅ Update profile route
+router.put("/update-profile", verifyToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const updated = await User.findByIdAndUpdate(userId, req.body, { new: true });
+
+        res.json({ message: "Profile updated", user: updated });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
     }
 });
 module.exports = router;

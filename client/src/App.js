@@ -5,6 +5,8 @@ import Footer from './component/footer';
 import Login from './Pages/login';
 import SignUp from './Pages/signup';
 import Dashboard from './Pages/dashboard';
+import Profile from './Pages/profile';
+import EditProfile from './Pages/editProfile';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
@@ -30,6 +32,9 @@ function App() {
                 path="/dashboard"
                 element={getToken() ? <Dashboard /> : <Navigate to="/login" />}
               />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/editProfile" element={<EditProfile />} />
+
               {/* <Route path="/" element={<Home />} /> */}
               {/* <Route path="/about" element={<About />} /> */}
               {/* <Route path="/contact" element={<Contact />} /> */}

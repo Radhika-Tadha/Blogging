@@ -5,7 +5,16 @@ import { useNavigate } from 'react-router-dom';
 export default function UserDashboard() {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user"));
+  // Always safely parse localStorage values
+  let storedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+  let user = null;
+
+  try {
+    user = storedUser ? JSON.parse(storedUser) : null;
+  } catch (e) {
+    console.error("Invalid user JSON:", storedUser);
+    user = null;
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");

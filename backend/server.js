@@ -12,6 +12,8 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error("Mongo Error:", err));
 
 app.use('/api/auth', require('./routes/auth'));
+app.use("/uploads", express.static("uploads"));
+
 
 app.listen(5000, () => {
   console.log("Server running on http://localhost:5000");
