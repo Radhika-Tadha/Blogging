@@ -22,7 +22,7 @@ export default function SignUp(props) {
 
         try {
             //send POST request to Node.js Backend
-            const res = await axios.post("http://localhost:5000/api/auth/signup", form);
+            const res = await axios.post("http://localhost:8000/api/auth/signup", form);
             alert(res.data.message);
             navigate("/login");
         } catch (err) {

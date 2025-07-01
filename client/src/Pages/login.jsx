@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import loginImage from '../Assets/p1.jpg'; // adjust path as needed
 
 
-export default function Login({setIsLoggedIn}) {
+export default function Login({ setIsLoggedIn }) {
     const [form, setForm] = useState({ email: "", password: "" });
     const navigate = useNavigate();
 
@@ -21,10 +21,11 @@ export default function Login({setIsLoggedIn}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("000");
 
         try {
             //send POST request to Node.js Backend
-            const res = await axios.post("http://localhost:5000/api/auth/login", form);
+            const res = await axios.post("http://localhost:8000/api/auth/login", form);
             // Optional: Save token if backend returns it
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("user", JSON.stringify(res.data.user)); // ✅ user added

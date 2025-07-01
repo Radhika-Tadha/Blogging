@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 export default function EditProfile() {
+    const navigate = useNavigate();
     const [image, setImage] = useState(null);
     const [form, setForm] = useState({
         name: "",
@@ -11,7 +13,7 @@ export default function EditProfile() {
         image: ""
     });
 
-   // Load user data from localStorage
+    // Load user data from localStorage
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (user) {
@@ -55,16 +57,36 @@ export default function EditProfile() {
 
         try {
             const res = await axios.put(
-                "http://localhost:5000/api/auth/update-profile",
-                form,
+                "http://localhost:8000/api/user/update-profile",
+                formData,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data",
                     },
                 });
+            if (!res.data.user) {
+                throw new Error("No user returned from server");
+            }
+            // alert("Profile updated!");
 
+            const updated = await axios.get("http://localhost:8000/api/auth/me", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log("000", updated);
+
+            //Update localStorage with fresh data
+            localStorage.setItem("user", JSON.stringify(updated.data.user));
+
+            //Redirect to profile
             alert("Profile updated!");
+            console.log("Fetched user:", res.data.user);
+
+
+            navigate("/profile"); // Optional: redirect to profile page
+
         } catch (err) {
             console.error("Update Faild", err);
             alert("Update failed");
@@ -77,9 +99,9 @@ export default function EditProfile() {
             <form onSubmit={handleUpdate}>
                 <input type="text" name="name" value={form.name} onChange={handleChange} className="form-control mb-2" placeholder="Full Name" />
                 <input type="email" name="email" value={form.email} disabled className="form-control mb-2" />
-                <input type="date" name="dob" value={form.dob} onChange={handleChange} className="form-control mb-2" />
-                <textarea name="bio" value={form.bio} onChange={handleChange} className="form-control mb-2" placeholder="Short Bio" />
-                <input type="file" name="image" value={form.image} onChange={handleFileChange} className="form-control mb-2" placeholder="Profile Image URL or file name" />
+                <input type="date" name="dob" value={form.dob || ""} onChange={handleChange} className="form-control mb-2" />
+                <textarea name="bio" value={form.bio || ""} onChange={handleChange} className="form-control mb-2" placeholder="Short Bio" ></textarea>
+                <input type="file" name="image" onChange={handleFileChange} className="form-control mb-2" placeholder="Profile Image URL or file name" />
 
                 <button className="btn btn-primary">Update Profile</button>
             </form>

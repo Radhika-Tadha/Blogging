@@ -1,11 +1,13 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const authMiddleware = require("../middleware/auth");
+
+
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
-
-//POST for signup 
+///POST for signup 
 router.post('/signup', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -32,63 +34,52 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-//POST for login
-router.post('/login', async (req, res) => {
+
+// POST: Login
+router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-
         if (!email || !password) {
-            return res.status(400).json({ message: "plz Enter fields" });
+            return res.status(400).json({ message: "Please enter all fields" });
         }
-        //check user login or not
+
         const user = await User.findOne({ email });
-        if (!user)
-            return res.status(400).json({ message: "Invalid Email" });
+        if (!user) return res.status(400).json({ message: "Invalid email" });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch)
-            return res.status(400).json({ message: "Correct Your Password" });
+        if (!isMatch) return res.status(400).json({ message: "Incorrect password" });
 
-        //iside your login controller
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-        res.json({
-            message: "login Success", token,
-            user, user: {
+        console.log("Token:", token);
+        return res.json({
+            message: "Login success",
+            token,
+            user: {
+                _id: user._id,
                 name: user.name,
                 email: user.email,
-                _id: user._id
-            }
+            },
+
         });
 
     } catch (err) {
-        console.error("login failed:", err);
-        return res.status(500).json({ message: 'internal server error' });
+        console.error("Login failed:", err);
+        return res.status(500).json({ message: "Internal server error" });
     }
 });
 
-// Protect route using token
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // user ID from token
-    next();
-  } catch (err) {
-    return res.status(403).json({ message: "Invalid token" });
-  }
-};
-
-// ✅ Update profile route
-router.put("/update-profile", verifyToken, async (req, res) => {
+// GET: Get Current User (used in profile page)
+router.get("/me", authMiddleware, async (req, res) => {
     try {
-        const userId = req.user.id;
-        const updated = await User.findByIdAndUpdate(userId, req.body, { new: true });
+        const user = await User.findById(req.userId).select("-password");
+        if (!user) return res.status(404).json({ message: "User not found" });
 
-        res.json({ message: "Profile updated", user: updated });
+        return res.json({ user });
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
+        console.error("Fetch user failed:", err);
+        return res.status(500).json({ message: "Server error" });
     }
 });
+
+
 module.exports = router;

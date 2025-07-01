@@ -33,7 +33,7 @@ function App() {
                 element={getToken() ? <Dashboard /> : <Navigate to="/login" />}
               />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/editProfile" element={<EditProfile />} />
+              <Route path="/edit-profile" element={<EditProfile />} />
 
               {/* <Route path="/" element={<Home />} /> */}
               {/* <Route path="/about" element={<About />} /> */}
