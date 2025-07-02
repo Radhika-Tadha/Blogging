@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
+import axios from "axios";
 import Navbar from './component/navbar';
 import Footer from './component/footer';
 import Login from './Pages/login';
@@ -9,37 +10,55 @@ import Profile from './Pages/profile';
 import EditProfile from './Pages/editProfile';
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+axios.defaults.withCredentials = true;
 
 
 function App() {
+  const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const getToken = () =>
-    localStorage.getItem("token") || sessionStorage.getItem("token");
-
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token); // true if token exists
+
+    // Validate session via cookie (not localStorage)
+    axios.get("http://localhost:8000/api/auth/me", { withCredentials: true })
+      .then(res => {
+        setUser(res.data.user);
+        setIsLoggedIn(true);
+      })
+
+      .catch(err => {
+        setUser(null);
+        setIsLoggedIn(false);
+        console.log("Not logged in:", err.response?.data?.message);
+
+      });
   }, []);
+
   return (
     <div className="App">
       <Router>
         <div className="App d-flex flex-column min-vh-100">
-          <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} user={user} setUser={setUser} /
+          >
           <main className="flex-grow-1">
             <Routes>
               <Route
                 path="/dashboard"
-                element={getToken() ? <Dashboard /> : <Navigate to="/login" />}
+                element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
               />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/edit-profile" element={<EditProfile />} />
+              <Route
+                path="/profile"
+                element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/edit-profile"
+                element={isLoggedIn ? <EditProfile setUser={setUser} /> : <Navigate to="/login" />}
+              />
 
-              {/* <Route path="/" element={<Home />} /> */}
-              {/* <Route path="/about" element={<About />} /> */}
-              {/* <Route path="/contact" element={<Contact />} /> */}
-              <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+              <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
               <Route path="/signup" element={<SignUp />} />
+              {/* <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} /> */}
+
 
             </Routes>
           </main>

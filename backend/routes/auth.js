@@ -49,11 +49,22 @@ router.post("/login", async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Incorrect password" });
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "7d"
+        });
+
+        //set cookies
+        res.cookie("token", token, {
+            httpOnly: true, // Secure from client JS
+            secure: false,  // Set to true in production (HTTPS)
+            sameSite: "Lax", // Prevent CSRF (Strict/Lax/None)
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        });
+
         console.log("Token:", token);
+
         return res.json({
             message: "Login success",
-            token,
             user: {
                 _id: user._id,
                 name: user.name,
@@ -79,6 +90,12 @@ router.get("/me", authMiddleware, async (req, res) => {
         console.error("Fetch user failed:", err);
         return res.status(500).json({ message: "Server error" });
     }
+});
+
+// ✅ POST: Logout (clear cookie)
+router.post("/logout", (req, res) => {
+    res.clearCookie("token");
+    return res.json({ message: "Logout successful" });
 });
 
 

@@ -1,13 +1,10 @@
-// import React from "react";
-// import SignUp from ".//signup";
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import Dashbord from './Pages/dashbord';
 import loginImage from '../Assets/p1.jpg'; // adjust path as needed
 
 
-export default function Login({ setIsLoggedIn }) {
+export default function Login({ setIsLoggedIn, setUser }) {
     const [form, setForm] = useState({ email: "", password: "" });
     const navigate = useNavigate();
 
@@ -25,12 +22,17 @@ export default function Login({ setIsLoggedIn }) {
 
         try {
             //send POST request to Node.js Backend
-            const res = await axios.post("http://localhost:8000/api/auth/login", form);
+            const res = await axios.post(
+                "http://localhost:8000/api/auth/login",
+                form,
+                { withCredentials: true });
+
             // Optional: Save token if backend returns it
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("user", JSON.stringify(res.data.user)); // ✅ user added
-            alert(res.data.message);
+            // localStorage.setItem("token", res.data.token);
+
+            setUser(res.data.user);  // ✅ user added
             setIsLoggedIn(true); // Update navbar
+
             navigate("/dashboard");
         } catch (err) {
             console.error("Login failed:", err);

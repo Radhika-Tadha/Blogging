@@ -1,6 +1,5 @@
 import React from 'react';
 import USER from '../Assets/user.png';
-// import EditProfile from './editProfile';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -14,17 +13,18 @@ export default function Profile() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const token = localStorage.getItem("token");
-            console.log("Token:",token);
+            // const token = localStorage.getItem("token");
+            // console.log("Token:",token);
             try {
                 const res = await axios.get("http://localhost:8000/api/auth/me", {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        // Authorization: `Bearer ${token}`,
+                          withCredentials: true,
                     },
                 });
                 console.log("Fetched user:",res.data.user);
 
-                // localStorage.setItem("user", JSON.stringify(updated.data.user));
+                // localStorage.setItem("user", JSON.stringify(res.data.user));
                 setUser(res.data.user);
                 // navigate("/profile");
             } catch (err) {
@@ -34,6 +34,7 @@ export default function Profile() {
 
         fetchUser();
     }, []);
+    
     if (!user) {
         return <h3 className="text-center mt-5">Please login to view profile.</h3>;
     }

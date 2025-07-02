@@ -9,14 +9,17 @@ import USER from '../Assets/user.png';
 export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
     const navigate = useNavigate();
 
+
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        setIsLoggedIn(false);
-        navigate("/login");
-    };
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("user");
+  setIsLoggedIn(false);
+  navigate("/login", { replace: true });
+};
 
     const user = JSON.parse(localStorage.getItem("user"));
-    const userImage = user?.image || USER; // Fallback image
 
     return (
         <div>
@@ -87,7 +90,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                                             </li>
                                             <li className="nav-item ms-2">
                                                 <span className="border border-light rounded-circle d-inline-block overflow-hidden" style={{ width: '40px', height: '40px' }} onClick={() => navigate("/profile")}>
-                                                    <img src={userImage} // Replace with actual path
+                                                    <img
+                                                        src={`http://localhost:8000/uploads/${user?.image || "default.png"}`}
                                                         alt="User"
                                                         className="img-fluid w-100 h-100"
                                                         style={{ objectFit: 'cover' }}
