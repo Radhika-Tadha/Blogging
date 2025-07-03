@@ -7,7 +7,7 @@ const app = express();
 const cookieParser = require("cookie-parser");
 
 app.use(cors({
-  origin: "http://localhost:3001",//Only allow your frontend origin
+  origin: "http://localhost:3000",//Only allow your frontend origin
   credentials: true, //Allow cookies
 }));
 //body parsers

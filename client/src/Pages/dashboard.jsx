@@ -23,18 +23,18 @@ export default function UserDashboard() {
     });
   }, [navigate]);
 
-  const handleLogout = async() => {
-    try {
-      await axios.post("http://localhost:8000/api/auth/logout", {}, {
-        withCredentials: true // ✅ send cookie to allow clearing it
-      });
-      setUser(null);
-    navigate("/login");
-     } catch (err) {
-      console.error("Logout failed:", err);
-      alert("Logout failed");
-    }
-  };
+  // const handleLogout = async() => {
+  //   try {
+  //     await axios.post("http://localhost:8000/api/auth/logout", {}, {
+  //       withCredentials: true // ✅ send cookie to allow clearing it
+  //     });
+  //     setUser(null);
+  //   navigate("/login");
+  //    } catch (err) {
+  //     console.error("Logout failed:", err);
+  //     alert("Logout failed");
+  //   }
+  // };
 
   if (!user) {
     return <h3 className="text-center mt-5">Unauthorized. Please login.</h3>;
@@ -52,9 +52,9 @@ export default function UserDashboard() {
             <li>Email: {user.email}</li>
             <li>User ID: {user._id}</li>
           </ul>
-          <button className="btn btn-danger mt-3" onClick={handleLogout}>
-            Logout
-          </button>
+          {/* <button className="btn btn-danger mt-3" onClick={handleLogout}> */}
+            {/* Logout */}
+          {/* </button> */}
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ export default function Login({ setIsLoggedIn, setUser }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("000");
+        // console.log("000");
 
         try {
             //send POST request to Node.js Backend

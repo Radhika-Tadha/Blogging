@@ -24,7 +24,6 @@ export default function Profile() {
                 });
                 console.log("Fetched user:",res.data.user);
 
-                // localStorage.setItem("user", JSON.stringify(res.data.user));
                 setUser(res.data.user);
                 // navigate("/profile");
             } catch (err) {

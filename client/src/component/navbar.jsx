@@ -1,25 +1,29 @@
 import React from 'react';
-// import './Navbar.css'; // optional for styling
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import USER from '../Assets/user.png';
+// import USER from '../Assets/user.png';
+import axios from 'axios';
 
 
-export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
-    const navigate = useNavigate();
+export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
+    // const navigate = useNavigate();
 
 
-    const handleLogout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("user");
-  setIsLoggedIn(false);
-  navigate("/login", { replace: true });
-};
+    const handleLogout = async () => {
+        try {
+            await axios.post("http://localhost:8000/api/auth/logout", {}, {
+                withCredentials: true
+            });
+            setIsLoggedIn(false);
+            setUser(null);
+            // navigate("/login");
+            window.location.href = "/login";
+        } catch (err) {
+            console.error("Logout failed:", err);
+        }
+    };
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    // const user = JSON.parse(localStorage.getItem("user"));
 
     return (
         <div>
@@ -85,11 +89,11 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                                         </>
                                     ) : (
                                         <>
-                                            <li className="nav-item">
-                                                <Link className="nav-link" onClick={handleLogout}>Logout</Link>
-                                            </li>
+                                            {/* Profile */}
                                             <li className="nav-item ms-2">
-                                                <span className="border border-light rounded-circle d-inline-block overflow-hidden" style={{ width: '40px', height: '40px' }} onClick={() => navigate("/profile")}>
+                                                <span className="border border-light rounded-circle d-inline-block overflow-hidden" style={{ width: '40px', height: '40px' }} role="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
                                                     <img
                                                         src={`http://localhost:8000/uploads/${user?.image || "default.png"}`}
                                                         alt="User"
@@ -97,6 +101,23 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                                                         style={{ objectFit: 'cover' }}
                                                     />
                                                 </span>
+                                                <ul className="dropdown-menu dropdown-menu-end">
+                                                    <li>
+                                                        <a className="dropdown-item" href="/profile"><i className="bi bi-person-circle"> </i> Profile</a>
+                                                    </li>
+                                                    <li>
+                                                        <a className="dropdown-item" href="/CreateBlog"> <i className="bi bi-journal-plus"> </i> New Blog</a>
+                                                    </li>
+                                                    <li>
+                                                        <a className="dropdown-item" href="/Blogcard"> <i className="bi bi-journal-plus"> </i> My Blog</a>
+                                                    </li>
+                                                    <li>
+                                                        <hr className="dropdown-divider" />
+                                                    </li>
+                                                    <li>
+                                                        <button className="dropdown-item text-danger" onClick={handleLogout}><i className="bi bi-box-arrow-right text-danger"> </i> Logout </button>
+                                                    </li>
+                                                </ul>
                                             </li>
                                         </>
                                     )}
@@ -106,7 +127,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     </div>
                 </nav>
             </>
-        </div>
+        </div >
     )
 }
 
