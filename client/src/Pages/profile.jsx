@@ -1,8 +1,10 @@
 import React from 'react';
 import USER from '../Assets/user.png';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+
 
 
 export default function Profile() {
@@ -19,21 +21,21 @@ export default function Profile() {
                 const res = await axios.get("http://localhost:8000/api/auth/me", {
                     headers: {
                         // Authorization: `Bearer ${token}`,
-                          withCredentials: true,
+                        withCredentials: true,
                     },
                 });
-                console.log("Fetched user:",res.data.user);
+                console.log("Fetched user:", res.data.user);
 
                 setUser(res.data.user);
                 // navigate("/profile");
             } catch (err) {
-                console.error("Fetch user failed", err.response?.data ||err.message);
+                console.error("Fetch user failed", err.response?.data || err.message);
             }
         };
 
         fetchUser();
     }, []);
-    
+
     if (!user) {
         return <h3 className="text-center mt-5">Please login to view profile.</h3>;
     }
@@ -42,23 +44,60 @@ export default function Profile() {
         : USER;
 
     return (
-        <div className="container mt-5">
-            <div className="card shadow-sm p-4">
-                <div className="text-center">
+        <div className="container vh-100 d-flex align-items-center justify-content-center mt-1">
+            <div className="row shadow-lg rounded-end" style={{ width: "100%", maxWidth: "900px", height: "500px" }}>
+                {/* LEFT SIDE - IMAGE */}
+                <div className="col-md-5 d-none d-md-block p-5" style={{ background: "linear-gradient(to right, #ee5a6f, #f29263)" }}>
                     <img
                         src={imageUrl}
                         alt="Profile"
                         className="rounded-circle"
-                        width="120"
-                        height="120"
+                        width="180"
+                        height="180"
                         style={{ objectFit: "cover" }}
-                    />
+                    /><br></br><br></br>
+                    <h3 className="text-center mt-4" style={{ color: "white" }}>{user.name}</h3>
+                    <br></br>
+                    <strong style={{ color: "white" }} onClick={() => navigate("/edit-profile")}><i className="bi bi-pencil-square fs-5"></i>
+                    </strong>
+
+
                 </div>
-                <h3 className="text-center mt-3">{user.name}</h3>
-                <p className="text-center text-muted">{user.email}</p>
-                <p><strong>Date of Birth:</strong> {user.dob || "Not Provided"}</p>
-                <p><strong>Bio:</strong> {user.bio || "No bio yet."}</p>
-                <button className="btn btn-primary btn-sm position-absolute" onClick={() => navigate("/edit-profile")} style={{ top: '15px', right: '15px' }} > Edit </button>
+
+                {/* RIGHT SIDE - FORM */}<br></br>
+                <div className="col-md-7 p-5 bg-white rounded-end "><br></br>
+                    <h3 className=" text-start border-0 border-bottom rounded-0 shadow-none">Information</h3>
+                    <div className='row'>
+                        <div className="col-sm-6 text-start text-muted border-0 border-bottom rounded-0 shadow-none">
+                            <p class="mt-5 mb-0"><strong>Email: </strong>{user.email}</p>
+                        </div><br></br>
+
+                        <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
+                            <p class="mt-5 mb-0"><strong>Mobile No.:</strong>{user.phone || "Not Provided"}</p>
+                        </div><br></br>
+
+                        <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
+                            <p class="mt-5 mb-0"><strong>Date of Birth:</strong>{user.dob || "Not Provided"}</p>
+                        </div><br></br>
+
+
+                        <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
+                            <p class="mt-5 mb-0"><strong>Bio :</strong>{user.bio || "Not Provided"}</p>
+                        </div><br></br>
+
+                        <ul className="mt-5 mb-0 list-unstyled d-flex gap-3">
+                            <li>
+                                <Link target='_self'><i className="bi bi-facebook fs-4 text-primary"></i></Link>
+                            </li>
+                            <li>
+                                <Link target='_self'><i className="bi bi-instagram fs-4 text-danger"></i></Link>
+                            </li>
+                            <li>
+                                <Link target='_self'><i className="bi bi-linkedin fs-4 text-info"></i></Link >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -36,7 +36,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
   `}</style>
                 <nav className="navbar navbar-expand-lg bg-body-tertiary">
                     <div className="container-fluid">
-                        <Link className="navbar-brand" to="/">Bloger.com</Link>
+                        <Link className="navbar-brand" to="/">Blogger.com</Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
@@ -109,7 +109,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
                                                         <a className="dropdown-item" href="/CreateBlog"> <i className="bi bi-journal-plus"> </i> New Blog</a>
                                                     </li>
                                                     <li>
-                                                        <a className="dropdown-item" href="/Blogcard"> <i className="bi bi-journal-plus"> </i> My Blog</a>
+                                                        <a className="dropdown-item" href="/AllBlogs"> <i className="bi bi-journal-plus"> </i> My Blog</a>
                                                     </li>
                                                     <li>
                                                         <hr className="dropdown-divider" />

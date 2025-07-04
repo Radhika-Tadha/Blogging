@@ -8,6 +8,7 @@ export default function EditProfile({setUser}) {
     const [form, setForm] = useState({
         name: "",
         email: "",
+        phone:"",
         dob: "",
         bio: "",
         image: ""
@@ -25,6 +26,7 @@ export default function EditProfile({setUser}) {
                 setForm({
                     name: user.name || "",
                     email: user.email || "",
+                    phone:user.phone || "",
                     dob: user.dob ? user.dob.slice(0, 10) : "",
                     bio: user.bio || "",
                     image: user.image || ""
@@ -60,6 +62,7 @@ export default function EditProfile({setUser}) {
 
         const formData = new FormData();
         formData.append("name", form.name);
+        formData.append("phone",form.phone);
         formData.append("dob", form.dob);
         formData.append("bio", form.bio);
         if (image) {
@@ -99,6 +102,7 @@ return (
         <form onSubmit={handleUpdate}>
             <input type="text" name="name" value={form.name} onChange={handleChange} className="form-control mb-2" placeholder="Full Name" />
             <input type="email" name="email" value={form.email} disabled className="form-control mb-2" />
+            <input type="text" name="phone" value={form.phone || ""} onChange={handleChange} placeholder="Mobile No." className="form-control mb-2" />
             <input type="date" name="dob" value={form.dob || ""} onChange={handleChange} className="form-control mb-2" />
             <textarea name="bio" value={form.bio || ""} onChange={handleChange} className="form-control mb-2" placeholder="Short Bio" ></textarea>
             <input type="file" name="image" onChange={handleFileChange} className="form-control mb-2" placeholder="Profile Image URL or file name" />

@@ -8,13 +8,14 @@ const authMiddleware = require("../middleware/auth");
 router.put("/update-profile", authMiddleware, upload.single("image"), async (req, res) => {
   try {
      const userId = req.userId;
-    const { name, dob, bio } = req.body;
+    const { name, phone, dob, bio } = req.body;
 
     console.log("BODY:", req.body); // ✅ Check if values are missing
     console.log("FILE:", req.file); // ✅ Check if image file uploaded
    
     const updateData = {
       name ,
+      phone,
       dob ,
       bio ,
       // ...(req.file && {image:req.file.filename})

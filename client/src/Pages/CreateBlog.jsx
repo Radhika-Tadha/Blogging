@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-export default function CreateBlog() {
+export default function CreateBlog({ blogToEdit }) {
 
     const [formData, setFormData] = useState({
         title: "",
@@ -10,7 +10,15 @@ export default function CreateBlog() {
         image: null,
     });
 
-
+    useEffect(() => {
+        if (blogToEdit) {
+            setFormData({
+                title: blogToEdit.title,
+                content: blogToEdit.content,
+                image: null,
+            });
+        }
+    }, [blogToEdit]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,20 +31,35 @@ export default function CreateBlog() {
         }
 
         try {
-            const res = await axios.post("http://localhost:8000/api/blog/create", blogData, {
-                withCredentials: true,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            let res;
+            if (blogToEdit) {
+                //Update block
+                res = await axios.put(`http://localhost:8000/api/blog/${blogToEdit._id}`,
+                    blogData, {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+            }
+            else {
+                res = await axios.post("http://localhost:8000/api/blog/create", blogData, {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+            }
             if (res.data.success) {
-                alert("Blog Created!");
+                alert(blogToEdit ? "Blog Updated" : "Blog Created!");
+                window.location.href = "/AllBlogs";
+
             } else {
-                alert("Failed to create blog");
+                alert("Somthing went wrong!");
             }
         } catch (err) {
-            alert("Failed to create", err);
-            console.error("Blog create error:", err.response?.data || err.message);
+            alert("Error Occurred", err);
+            console.error("Blog Submit error:", err.response?.data || err.message);
         }
     };
 
@@ -60,12 +83,12 @@ export default function CreateBlog() {
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
                         <div className="mb-3 text-start">
                             <label className="form-label">Title</label>
-                            <input type="text" className="form-control" name="title" placeholder="Enter blog title" onChange={handleChange} required />
+                            <input type="text" className="form-control" value={formData.title} name="title" placeholder="Enter blog title" onChange={handleChange} required />
                         </div>
 
                         <div className="mb-3 text-start">
                             <label className="form-label">Content</label>
-                            <textarea className="form-control" name="content" rows="5" placeholder="Write your blog here..." onChange={handleChange} required ></textarea>
+                            <textarea className="form-control" value={formData.content} name="content" rows="5" placeholder="Write your blog here..." onChange={handleChange} required ></textarea>
                         </div>
 
                         <div className="mb-3 text-start">
@@ -73,7 +96,7 @@ export default function CreateBlog() {
                             <input type="file" className="form-control" name="image" onChange={handleChange} />
                         </div>
 
-                        <button className="btn btn-success">🚀 Publish Blog</button>
+                        <button className="btn btn-success">{blogToEdit ? "Update Blog" : "Publish Blog"}</button>
                     </form>
                 </div>
 

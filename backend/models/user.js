@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema({
     minlength: 6,
   },
 
+  phone:{
+    type:String,
+    required:true,
+    minlength:10,
+  },
+  
   dob: {
     type: String, // Store as YYYY-MM-DD string
     default: "",

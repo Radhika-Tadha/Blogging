@@ -7,29 +7,29 @@ const authMiddleware = require("../middleware/auth");
 
 
 //create blog post
-router.post('/create', authMiddleware, upload.single("image"), async (req,res) => {
-    try {
-        const { title, content } = req.body;
-        const author = req.userId;
-        const image = req.file ? req.file.filename : null;
+router.post('/create', authMiddleware, upload.single("image"), async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const author = req.userId;
+    const image = req.file ? req.file.filename : null;
 
     if (!title || !content) {
       return res.status(400).json({ success: false, message: "Title and content required" });
     }
 
-        const blog = new Blog({
-            title,
-            content,
-            author,
-            image,
-        });
-        await blog.save();
+    const blog = new Blog({
+      title,
+      content,
+      author,
+      image,
+    });
+    await blog.save();
 
-        res.status(201).json({ success: true, blog });
-    } catch (error) {
-        console.error("Blog created error:", error);
-        res.status(500).json({ success: false, message: "Failed to create blog" });
-    }
+    res.status(201).json({ success: true, blog });
+  } catch (error) {
+    console.error("Blog created error:", error);
+    res.status(500).json({ success: false, message: "Failed to create blog" });
+  }
 });
 
 // ✅ GET logged-in user's blogs
@@ -38,6 +38,8 @@ router.get("/my-blogs", authMiddleware, async (req, res) => {
     const userId = req.userId; // extracted from cookie by middleware
 
     const blogs = await Blog.find({ author: userId }).sort({ createdAt: -1 });
+    console.log("Blogs found:", blogs.length); // ✅ log blog count
+
 
     res.status(200).json({ success: true, blogs });
   } catch (err) {
@@ -72,7 +74,33 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//blog deleted
+// routes/blog.js
+
+router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+
+    if (blog.author.toString() !== req.userId) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    blog.title = req.body.title || blog.title;
+    blog.content = req.body.content || blog.content;
+    if (req.file) {
+      blog.image = req.file.filename;
+    }
+
+    await blog.save();
+
+    res.json({ success: true, blog });
+  } catch (error) {
+    console.error("Update blog error:", error);
+    res.status(500).json({ success: false, message: "Failed to update blog" });
+  }
+});
+
+//blog delete
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
