@@ -47,7 +47,7 @@ export default function Profile() {
         <div className="container vh-100 d-flex align-items-center justify-content-center mt-1">
             <div className="row shadow-lg rounded-end" style={{ width: "100%", maxWidth: "900px", height: "500px" }}>
                 {/* LEFT SIDE - IMAGE */}
-                <div className="col-md-5 d-none d-md-block p-5" style={{ background: "linear-gradient(to right, #ee5a6f, #f29263)" }}>
+                <div className="col-md-4 d-none d-md-block p-5" style={{ background: "linear-gradient(to right, #ee5a6f, #f29263)" }}>
                     <img
                         src={imageUrl}
                         alt="Profile"
@@ -65,7 +65,7 @@ export default function Profile() {
                 </div>
 
                 {/* RIGHT SIDE - FORM */}<br></br>
-                <div className="col-md-7 p-5 bg-white rounded-end "><br></br>
+                <div className="col-md-8 p-5 bg-white rounded-end "><br></br>
                     <h3 className=" text-start border-0 border-bottom rounded-0 shadow-none">Information</h3>
                     <div className='row'>
                         <div className="col-sm-6 text-start text-muted border-0 border-bottom rounded-0 shadow-none">

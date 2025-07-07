@@ -29,10 +29,21 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
         <div>
             <>
                 <style>{`
-    .navbar-brand{
-      font-family: Georgia, serif;
-      color:blue;
-    }
+        .navbar-brand{
+            font-family: Georgia, serif;
+            color:blue;
+        }
+        .navbar{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; 
+            background-color: white;
+        }
+        .content {
+           padding-top: 70px;
+        }
   `}</style>
                 <nav className="navbar navbar-expand-lg bg-body-tertiary">
                     <div className="container-fluid">
@@ -46,18 +57,12 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
                                     <Link className="nav-link active" aria-current="page" to="/">Home</Link>
                                 </li>
 
-                                <li className="nav-item dropdown">
-                                    <Link className="nav-link dropdown-toggle" to="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Dropdown
-                                    </Link>
-                                    <ul className="dropdown-menu">
-                                        <li><Link className="dropdown-item" to="/">Trending</Link></li>
-                                        <li><Link className="dropdown-item" to="/">File Industry</Link></li>
-                                        <li><Link className="dropdown-item" to="/">Funny</Link></li>
-                                        <li><Link className="dropdown-item" to="/">Business</Link></li>
-                                        <li><hr className="dropdown-divider" /></li>
-                                        <li><Link className="dropdown-item" to="/">Something else here</Link></li>
-                                    </ul>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/AllBlogs">Blogs</Link>
+                                </li>
+
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/AllBlogs">AboutUs</Link>
                                 </li>
 
                                 <li className="nav-item">
@@ -109,7 +114,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
                                                         <a className="dropdown-item" href="/CreateBlog"> <i className="bi bi-journal-plus"> </i> New Blog</a>
                                                     </li>
                                                     <li>
-                                                        <a className="dropdown-item" href="/AllBlogs"> <i className="bi bi-journal-plus"> </i> My Blog</a>
+                                                        <a className="dropdown-item" href="/MyBlogs"> <i className="bi bi-journal-plus"> </i> My Blog</a>
                                                     </li>
                                                     <li>
                                                         <hr className="dropdown-divider" />

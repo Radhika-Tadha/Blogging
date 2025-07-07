@@ -8,10 +8,10 @@ export default function EditWrapper() {
   const blogToEdit = location.state?.blogToEdit;
 
   if(!blogToEdit){
-    navigate("/AllBlogs");
+    navigate("/MyBlogs");
     return null;
   }else{
-    navigate("/AllBlogs");
+    navigate("/MyBlogs");
   }
 
   return <CreateBlog blogToEdit={blogToEdit} />;

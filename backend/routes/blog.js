@@ -4,6 +4,7 @@ const Blog = require("../models/blog");
 const auth = require("../middleware/auth");
 const upload = require("../middleware/multer");
 const authMiddleware = require("../middleware/auth");
+// const uploads = require("../uploads");
 
 
 //create blog post
@@ -66,7 +67,7 @@ router.get("/all", async (req, res) => {
 //display blog from id
 router.get("/:id", async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate("author", "name email");
+    const blog = await Blog.findById(req.params.id).populate("author", "name");
     if (!blog) return res.status(404).json({ message: "Blog not found" });
     res.status(200).json({ blog });
   } catch (error) {
@@ -74,7 +75,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// routes/blog.js
+// blog updates
 
 router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
   try {
@@ -111,12 +112,29 @@ router.delete("/:id", authMiddleware, async (req, res) => {
       return res.status(403).json({ message: "You can only delete your own blogs" });
     }
 
+    // ✅ Safe image deletion
+
     await blog.deleteOne();
     res.status(200).json({ message: "Blog deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting blog", error });
   }
 });
+
+
+// Public route: Get all blogs by all users
+// router.get("/all", async (req, res) => {
+//   try {
+//     const blogs = await Blog.find({})
+//       .populate("author", "name image email")
+//       .sort({ createdAt: -1 });
+
+//     res.status(200).json({ blogs });
+//   } catch (error) {
+//     console.error("Error fetching blogs:", error.message); // log it!
+//     res.status(500).json({ message: "Error fetching blogs", error });
+//   }
+// });
 
 
 module.exports = router;

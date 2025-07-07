@@ -3,6 +3,8 @@ import './App.css';
 import axios from "axios";
 import Navbar from './component/navbar';
 import Footer from './component/footer';
+import MyBlogs from './Pages/MyBlogs';
+import BlogDetail from './Pages/BlogDetail';
 import AllBlogs from './Pages/AllBlogs';
 import EditWrapper from "./Pages/EditWrapper";
 import Login from './Pages/login';
@@ -72,13 +74,21 @@ function App() {
                   />
 
                   <Route
+                    path="/MyBlogs"
+                    element={isLoggedIn ? <MyBlogs setUser={setUser} /> : <Navigate to="/login" />}
+                  />
+                  <Route
+                    path="/edit/:id"
+                    element={isLoggedIn ? <EditWrapper setUser={setUser} /> : <Navigate to="/login" />}
+                  />
+                  <Route path="/blog/:id"
+                    element={isLoggedIn ? <BlogDetail setUser={setUser} /> : <Navigate to="/login" />}
+                  />
+                  <Route
                     path="/AllBlogs"
                     element={isLoggedIn ? <AllBlogs setUser={setUser} /> : <Navigate to="/login" />}
                   />
-                  <Route
-                    path="/edit"
-                    element={isLoggedIn ? <EditWrapper setUser={setUser} /> : <Navigate to="/login" />}
-                  />
+
                   <Route path="/login"
                     element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
                   />

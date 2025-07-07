@@ -52,7 +52,7 @@ export default function CreateBlog({ blogToEdit }) {
             }
             if (res.data.success) {
                 alert(blogToEdit ? "Blog Updated" : "Blog Created!");
-                window.location.href = "/AllBlogs";
+                window.location.href = "/MyBlogs";
 
             } else {
                 alert("Somthing went wrong!");
