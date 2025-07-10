@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import loginImage from '../Assets/p1.jpg'; // adjust path as needed
+import loginImage from '../Assets/p2.jpg'; // adjust path as needed
 
 
 export default function Login({ setIsLoggedIn, setUser }) {
@@ -18,7 +18,6 @@ export default function Login({ setIsLoggedIn, setUser }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log("000");
 
         try {
             //send POST request to Node.js Backend
@@ -56,7 +55,7 @@ export default function Login({ setIsLoggedIn, setUser }) {
 
                         {/* RIGHT SIDE - FORM */}<br></br>
                         <div className="col-md-6 bg-white p-5 rounded-end"><br></br>
-                            <h3 className="mb-4">Login</h3>
+                            <h3 className="mb-4" style={{color:"red"}}>Login</h3>
                             <form onSubmit={handleSubmit}>     <br></br>
                                 <div className="mb- text-start">
                                     <input type="email"
@@ -77,10 +76,10 @@ export default function Login({ setIsLoggedIn, setUser }) {
                                         placeholder="Enter password" />
                                 </div><br></br>
 
-                                <button type="submit" className="btn btn-primary w-100">Login</button>
+                                <button type="submit" className="btn btn-danger w-100">Login</button>
                             </form>
                             <p className="mt-3 text-center">
-                                Does't have any account? <a href="/signup" className="text-decoration-none">Sign Up here</a>
+                                Does't have any account? <a href="/signup" className="text-decoration-none bs-danger-bg-subtle"style={{color:"red"}}>Sign Up here</a>
                             </p>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import USER from '../Assets/user.png';
+import Default from '../Assets/default.png';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -41,13 +41,13 @@ export default function Profile() {
     }
     const imageUrl = user.image
         ? `http://localhost:8000/uploads/${user.image}` // ✅ Adjust based on your multer storage path
-        : USER;
+        : {Default};
 
     return (
         <div className="container vh-100 d-flex align-items-center justify-content-center mt-1">
             <div className="row shadow-lg rounded-end" style={{ width: "100%", maxWidth: "900px", height: "500px" }}>
                 {/* LEFT SIDE - IMAGE */}
-                <div className="col-md-4 d-none d-md-block p-5" style={{ background: "linear-gradient(to right, #ee5a6f, #f29263)" }}>
+                <div className="col-md-4 d-none d-md-block p-5" style={{ background: "linear-gradient(to right,#d5967e, #a64528)" }}>
                     <img
                         src={imageUrl}
                         alt="Profile"
@@ -66,23 +66,23 @@ export default function Profile() {
 
                 {/* RIGHT SIDE - FORM */}<br></br>
                 <div className="col-md-8 p-5 bg-white rounded-end "><br></br>
-                    <h3 className=" text-start border-0 border-bottom rounded-0 shadow-none">Information</h3>
+                    <h3 className=" text-start border-0 border-bottom rounded-0 shadow-none"style={{color:"#BB5A3A"}}>Information</h3>
                     <div className='row'>
                         <div className="col-sm-6 text-start text-muted border-0 border-bottom rounded-0 shadow-none">
-                            <p class="mt-5 mb-0"><strong>Email: </strong>{user.email}</p>
+                            <p className="mt-5 mb-0"><strong>Email: </strong>{user.email}</p>
                         </div><br></br>
 
                         <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
-                            <p class="mt-5 mb-0"><strong>Mobile No.:</strong>{user.phone || "Not Provided"}</p>
+                            <p className="mt-5 mb-0"><strong>Mobile No.:</strong>{user.phone || "Not Provided"}</p>
                         </div><br></br>
 
                         <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
-                            <p class="mt-5 mb-0"><strong>Date of Birth:</strong>{user.dob || "Not Provided"}</p>
+                            <p className="mt-5 mb-0"><strong>Date of Birth:</strong>{user.dob || "Not Provided"}</p>
                         </div><br></br>
 
 
                         <div className="col-sm-6 mb- text-start border-0 border-bottom rounded-0 shadow-none">
-                            <p class="mt-5 mb-0"><strong>Bio :</strong>{user.bio || "Not Provided"}</p>
+                            <p className="mt-5 mb-0"><strong>Bio :</strong>{user.bio || "Not Provided"}</p>
                         </div><br></br>
 
                         <ul className="mt-5 mb-0 list-unstyled d-flex gap-3">

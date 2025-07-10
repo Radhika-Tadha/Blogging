@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+// import Default from "../Assets/default.png";
 import { useState, useEffect } from "react";
 
 export default function CreateBlog({ blogToEdit }) {
@@ -15,7 +16,7 @@ export default function CreateBlog({ blogToEdit }) {
             setFormData({
                 title: blogToEdit.title,
                 content: blogToEdit.content,
-                image: null,
+                image: blogToEdit.image,
             });
         }
     }, [blogToEdit]);
@@ -28,6 +29,8 @@ export default function CreateBlog({ blogToEdit }) {
         blogData.append("content", formData.content);
         if (formData.image) {
             blogData.append("image", formData.image)
+        } else {
+            blogData.append("imageUrl", "/uploads/default.png");
         }
 
         try {
@@ -77,8 +80,8 @@ export default function CreateBlog({ blogToEdit }) {
     return (
         <div><>
             <div className="container">
-                <div className="container mt-5" style={{ maxWidth: "600px" }}>
-                    <h3 className="mb-4">📝 Create New Blog</h3>
+                <div className="container mt-5 p-4" style={{ maxWidth: "600px", backgroundColor: "#F1E7E7" }}>
+                    <h3 className="mb-4" style={{ color: "#000" }}> Create a New Blog</h3>
 
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
                         <div className="mb-3 text-start">
@@ -96,7 +99,7 @@ export default function CreateBlog({ blogToEdit }) {
                             <input type="file" className="form-control" name="image" onChange={handleChange} />
                         </div>
 
-                        <button className="btn btn-success">{blogToEdit ? "Update Blog" : "Publish Blog"}</button>
+                        <button className="btn btn-danger">{blogToEdit ? "Update Blog" : "Publish Blog"}</button>
                     </form>
                 </div>
 

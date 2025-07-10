@@ -10,9 +10,17 @@ const authMiddleware = require("../middleware/auth");
 //create blog post
 router.post('/create', authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content,imageUrl } = req.body;
     const author = req.userId;
-    const image = req.file ? req.file.filename : null;
+    let image;                   
+
+    if (req.file) {
+    image = "/uploads/" + req.file.filename;
+  } else if (imageUrl) {
+    image = imageUrl; // use default image
+  } else {
+    image = "/uploads/default.png"; // fallback image (optional)
+  }
 
     if (!title || !content) {
       return res.status(400).json({ success: false, message: "Title and content required" });
@@ -24,6 +32,8 @@ router.post('/create', authMiddleware, upload.single("image"), async (req, res) 
       author,
       image,
     });
+        console.log("Image path used:", image);
+
     await blog.save();
 
     res.status(201).json({ success: true, blog });
@@ -38,7 +48,7 @@ router.get("/my-blogs", authMiddleware, async (req, res) => {
   try {
     const userId = req.userId; // extracted from cookie by middleware
 
-    const blogs = await Blog.find({ author: userId }).sort({ createdAt: -1 });
+    const blogs = await Blog.find({ author: req.userId }).populate("author", "_id name email").sort({ createdAt: -1 });
     console.log("Blogs found:", blogs.length); // ✅ log blog count
 
 
@@ -121,20 +131,36 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-
 // Public route: Get all blogs by all users
-// router.get("/all", async (req, res) => {
-//   try {
-//     const blogs = await Blog.find({})
-//       .populate("author", "name image email")
-//       .sort({ createdAt: -1 });
+router.get("/all", async (req, res) => {
+  try {
+    const blogs = await Blog.find({})
+      .populate("author", "name image email")
+      .sort({ createdAt: -1 });
 
-//     res.status(200).json({ blogs });
-//   } catch (error) {
-//     console.error("Error fetching blogs:", error.message); // log it!
-//     res.status(500).json({ message: "Error fetching blogs", error });
-//   }
-// });
+    res.status(200).json({ blogs });
+  } catch (error) {
+    console.error("Error fetching blogs:", error.message); // log it!
+    res.status(500).json({ message: "Error fetching blogs", error });
+  }
+});
 
+// GET/api/blog search=keyword
+router.get("/", async (req, res) => {
+  const search = req.query.search || "";
+  try {
+    const blogs = await Blog.find({
+      $or: [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } }
+      ]
+    }).populate("author", "name");
+
+    res.status(200).json(blogs);
+  } catch (err) {
+    console.error("Error searching blogs:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 module.exports = router;

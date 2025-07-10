@@ -22,6 +22,11 @@ const blogSchema = new mongoose.Schema({
     ref: "User", // refer to User model
     required: true,
   },
+  
+  comment:{
+    type : String,
+  
+  },
 
   createdAt: {
     type: Date,

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import loginImage from '../Assets/p1.jpg';
+import loginImage from '../Assets/p2.jpg';
 
 
 export default function SignUp(props) {
@@ -47,7 +47,7 @@ export default function SignUp(props) {
 
                         {/* RIGHT SIDE - FORM */}<br></br>
                         <div className="col-md-6 bg-white p-4 rounded-end"><br></br>
-                            <h3 className="mb-4">Sign Up</h3>
+                            <h3 className="mb-4"style={{color:"red"}}>Sign Up</h3>
                             <form onSubmit={handleSubmit}><br></br>
 
                                 <div className="mb-3 text-start">
@@ -64,11 +64,11 @@ export default function SignUp(props) {
                                 </div>
 
                                 <div className="form-check text-start">
-                                    <input className="form-check-input" type="checkbox" value="" id="checkChecked" />
+                                    <input className="form-check-input" style={{color:"red"}} type="checkbox" value="" id="checkChecked" />
                                     <label className="form-check-label" htmlFor="checkChecked">Remember Me</label>
                                 </div>
                                 <br></br>
-                                <button type="submit" className="btn btn-primary w-100">Sign Up</button>
+                                <button type="submit" className="btn btn-danger w-100">Sign Up</button>
                             </form>
                             {/* <p className="mt-3 text-center">
                                 Already have an account? <a href="/login" className="text-decoration-none">Go to the Login</a>

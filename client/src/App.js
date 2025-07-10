@@ -7,6 +7,9 @@ import MyBlogs from './Pages/MyBlogs';
 import BlogDetail from './Pages/BlogDetail';
 import AllBlogs from './Pages/AllBlogs';
 import EditWrapper from "./Pages/EditWrapper";
+import ContactUs from "./Pages/ContactUs";
+import AboutUs from "./Pages/AboutUs";
+
 import Login from './Pages/login';
 import SignUp from './Pages/signup';
 import Dashboard from './Pages/dashboard';
@@ -89,6 +92,9 @@ function App() {
                     element={isLoggedIn ? <AllBlogs setUser={setUser} /> : <Navigate to="/login" />}
                   />
 
+                  {/* <Route path="/contact" element={<ContactUs />} /> */}
+                  <Route path="/about" element={<AboutUs />} />
+
                   <Route path="/login"
                     element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
                   />
@@ -100,7 +106,8 @@ function App() {
                 </Routes>
 
               </main>
-
+              {/* <AboutUs/> */}
+              <ContactUs/>
               <Footer />
             </div>
           </Router>
