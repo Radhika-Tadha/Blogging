@@ -7,6 +7,7 @@ import loginImage from '../Assets/p2.jpg';
 
 export default function SignUp(props) {
     const [form, setForm] = useState({ name: "", email: "", password: "" });
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
 
@@ -47,7 +48,7 @@ export default function SignUp(props) {
 
                         {/* RIGHT SIDE - FORM */}<br></br>
                         <div className="col-md-6 bg-white p-4 rounded-end"><br></br>
-                            <h3 className="mb-4"style={{color:"red"}}>Sign Up</h3>
+                            <h3 className="mb-4" style={{ color: "red" }}>Sign Up</h3>
                             <form onSubmit={handleSubmit}><br></br>
 
                                 <div className="mb-3 text-start">
@@ -58,13 +59,23 @@ export default function SignUp(props) {
                                     <input type="email" name="email" className="form-control border-0 border-bottom rounded-0 shadow-none" id="email" autoComplete="username" onChange={handleChange} placeholder="Enter email" />
                                 </div><br></br>
 
-                                <div className="mb-3 text-start">
-                                    <input type="password" name="password" className="form-control border-0 border-bottom rounded-0 shadow-none" id="password" autoComplete="current-password" onChange={handleChange} placeholder="Enter password" />
-
+                                <div className="mb-3 text-start d-flex">
+                                    <input type={showPassword ? "text" : "password"} name="password" className="form-control border-0 border-bottom rounded-0 shadow-none" id="password"
+                                        autoComplete="current-password"
+                                        onChange={handleChange}
+                                        placeholder="Enter password" />
+                                    <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        style={{
+                                            right: "10px",
+                                            cursor: "pointer",
+                                            color: "#333"
+                                        }}
+                                    ></i>
                                 </div>
 
                                 <div className="form-check text-start">
-                                    <input className="form-check-input" style={{color:"red"}} type="checkbox" value="" id="checkChecked" />
+                                    <input className="form-check-input" style={{ color: "red" }} type="checkbox" value="" id="checkChecked" />
                                     <label className="form-check-label" htmlFor="checkChecked">Remember Me</label>
                                 </div>
                                 <br></br>

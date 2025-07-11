@@ -100,8 +100,7 @@ export default function ContactUs() {
                 />
               </div>
               <div className="text-end">
-                {/* <button type="submit" className="btn custom-readmore" onClick={() => navigate("/about")} > Read More</button> */}
-
+      
                 <button type="submit" className="btn custom-readmore rounded-0">
                   Send Message
                 </button>

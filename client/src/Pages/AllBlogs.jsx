@@ -4,9 +4,6 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import LoadingSpinner from "../component/LoadingSpinner"; // adjust path
 
-// { loading && <LoadingSpinner /> }
-
-
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
@@ -18,8 +15,6 @@ export default function AllBlogs() {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // console.log("Fetched Blogs:", res.data);
-
     useEffect(() => {
         const fetchBlogs = async () => {
 
@@ -30,7 +25,7 @@ export default function AllBlogs() {
                     : `http://localhost:8000/api/blog/all`;
                 const res = await axios.get(url, { withCredentials: true });
 
-                console.log(searchTerm);
+                // console.log(searchTerm);
                 setBlogs(res.data.blogs || res.data);
 
                 setTimeout(() => {
@@ -58,7 +53,6 @@ export default function AllBlogs() {
             </h3>
         );
     }
-
     return (
         <div>
             <>
@@ -89,7 +83,5 @@ export default function AllBlogs() {
                 </div>
             </>
         </div >
-
     );
-
 }  

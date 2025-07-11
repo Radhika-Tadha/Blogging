@@ -2,9 +2,6 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import BlogCard from "../component/BlogCard";
-
-// import BlogCard from "../component/BlogCard";
 
 export default function BlogDetail({ handleDelete, isOwnBlog }) {
     const [likes, setLikes] = useState(0);
@@ -42,9 +39,9 @@ export default function BlogDetail({ handleDelete, isOwnBlog }) {
 
     if (!blog) return <h4 className="text-center mt-5">Loading blog...</h4>;
 
-    const imageUrl = user?.image
-        ? `http://localhost:8000/uploads/${user.image}` // ✅ Adjust based on your multer storage path
-        : null;
+    // const imageUrl = user?.image
+    //     ? `http://localhost:8000/uploads/${user.image}` // ✅ Adjust based on your multer storage path
+    //     : null;
 
 
     // return...................................................
@@ -75,21 +72,6 @@ export default function BlogDetail({ handleDelete, isOwnBlog }) {
                                 day: 'numeric',
                                 year: 'numeric'
                             })} </p>
-
-                        {/* {isOwnBlog && (
-                            <div className="dropdown text-end">
-                                <button className="btn btn-light btn-sm"
-                                    type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                    style={{ border: "none", fontSize: "20px", lineHeight: "1" }}>
-                                    ⋮
-                                </button>
-                                <ul className="dropdown-menu">
-                                    <li><button className="dropdown-item" onClick={() => navigate("/edit", { state: { blogToEdit: blog } })}>Edit</button></li>
-                                    <li><button className="dropdown-item" onClick={handleDelete}>Delete</button></li>
-                                </ul>
-                            </div>
-                        )} */}
 
                         {blog.image && (
                             <img src={`http://localhost:8000/uploads/${blog.image}`}

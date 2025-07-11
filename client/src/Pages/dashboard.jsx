@@ -1,37 +1,61 @@
 
 import React from 'react';
 // import home1 from "../Assets/home3.jpg";
+import BlogCard from "../component/BlogCard";
 import img1 from "../Assets/home22.jpeg";
 import img2 from "../Assets/home11.jpg";
 import img3 from "../Assets/home3.jpg";
 
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useLocation } from "react-router-dom";
 import axios from 'axios';
 
 export default function UserDashboard() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [blogs, setBlog] = useState([]); //empty array
+  const [currentUser, setCurrentUser] = useState(null);
+  const contactRef = useRef(null);
+  const location = useLocation();
+
 
 
   useEffect(() => {
-    // Fetch user from cookie-authenticated backend
-    axios.get("http://localhost:8000/api/auth/me", {
-      withCredentials: true
-    })
-      .then(res => {
-        setUser(res.data.user);
-      })
-      .catch(err => {
-        console.error("User fetch failed:", err);
-        navigate("/login");
-      });
-  }, [navigate]);
+    // for contact page
+    if (location.hash === "#contact" && contactRef.current) {
+      contactRef.current.scrollIntoView({ behavior: "smooth" });
+    }
 
 
 
-  if (!user) {
-    return <h3 className="text-center mt-5">Unauthorized. Please login.</h3>;
+    const fetchBlog = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/blog/my-blogs", {
+          withCredentials: true,
+        });
+        // console.log("blog.author:", blogs.author);
+        // console.log("Fetched Blogs:", res.data);
+        setBlog(res.data.blogs);
+
+      } catch (err) {
+        console.error("Fetch Blog failed", err.response?.data || err.message);
+      }
+      try {
+        const userRes = await axios.get("http://localhost:8000/api/auth/user", {
+          withCredentials: true,
+        });
+        setCurrentUser(userRes.data.user);
+        // console.log("Current User:", userRes.data.user);
+      } catch (err) {
+        console.error("User fetch failed:", err.response?.data || err.message);
+      }
+    };
+    fetchBlog();
+
+  }, [location]);
+
+  if (!Array.isArray(blogs) || blogs.length === 0) {
+    return <h3 className="text-center mt-5">Please check your blog created.</h3>;
   }
 
   return (
@@ -41,6 +65,18 @@ export default function UserDashboard() {
     transform: scale(1.05);
     transition: transform 0.4s ease;
     }
+    .custom-readmore {
+           border: 1px solid #bb5a3a;
+           color: #bb5a3a;
+           background-color: transparent;
+           border-radius: 0;
+           padding: 8px 20px;
+           transition: background-color 0.3s ease, color 0.3s ease;
+        }
+      .custom-readmore:hover {
+           background-color: #bb5a3a;
+           color: #ffff;
+        }
     `
       }</style>
       <div className="container-fluid px-2 mt-5">
@@ -63,22 +99,22 @@ export default function UserDashboard() {
 
       {/* Blog section */}
 
-
-      <div className="container mt-5">
-        <h2 className="mb-4">My Blog </h2>
-        <button type='submit' className='btn btn-danger' onClick={() => { navigate("/AllBlogs") }}>All Blogs</button>
-
-        {/* <div className="card">
-          <div className="card-body">
-            <h5 className="card-title">Dashboard Overview</h5>
-            <p className="card-text">This is your user dashboard where you can see recent activity or personal info.</p>
-            <ul>
-              <li>Email: {user.email}</li>
-              <li>User ID: {user._id}</li>
-            </ul>
-          </div>
-        </div> */}
+      <div className="container mt-4">
+        <h3 className='fw-bold'>My Blog</h3>
+        <div className="container mt-5 text-end">
+          <button type='submit' className='btn custom-readmore rounded-0' onClick={() => { navigate("/MyBlogs") }}>See More</button>
+        </div>
+        <div className="row d-flex gap-3 d-flex align-items-center">
+          {blogs.map((blog) => (
+            <div className="col-md-4 col-lg-3 m-4 " key={blog._id}>
+              <BlogCard blog={blog}
+                isOwnBlog={currentUser && currentUser._id === (blog.author?._id || blog.author._id)}
+              />
+            </div>
+          ))}
+        </div>
       </div>
+
     </>
   );
 }

@@ -144,7 +144,6 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
                                     </>
                                 )}
                             </ul>
-                            {/* </form> */}
                         </div>
                     </div>
                 </nav>

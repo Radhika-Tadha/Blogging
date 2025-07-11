@@ -3,19 +3,21 @@ import './App.css';
 import axios from "axios";
 import Navbar from './component/navbar';
 import Footer from './component/footer';
+// Pages 
 import MyBlogs from './Pages/MyBlogs';
 import BlogDetail from './Pages/BlogDetail';
 import AllBlogs from './Pages/AllBlogs';
 import EditWrapper from "./Pages/EditWrapper";
-import ContactUs from "./Pages/ContactUs";
 import AboutUs from "./Pages/AboutUs";
-
+import ContactUs from "./Pages/ContactUs";
 import Login from './Pages/login';
 import SignUp from './Pages/signup';
 import Dashboard from './Pages/dashboard';
 import Profile from './Pages/profile';
 import EditProfile from './Pages/editProfile';
 import CreateBlog from './Pages/CreateBlog';
+import ForgotPwd from './Pages/ForgotPwd';
+// all Hooks
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
@@ -39,7 +41,12 @@ function App() {
       .catch(err => {
         setUser(null);
         setIsLoggedIn(false);
+        
+        // 🟡 Only show error on protected pages, skip logging on /login or /ForgotPwd
+      const publicRoutes = ["/login", "/signup", "/ForgotPwd"];
+      if (!publicRoutes.includes(window.location.pathname)) {
         console.log("Not logged in:", err.response?.data?.message);
+      }
 
       })
       .finally(() => {
@@ -92,11 +99,14 @@ function App() {
                     element={isLoggedIn ? <AllBlogs setUser={setUser} /> : <Navigate to="/login" />}
                   />
 
-                  {/* <Route path="/contact" element={<ContactUs />} /> */}
+                  <Route path="/contact" element={<ContactUs />} />
                   <Route path="/about" element={<AboutUs />} />
 
                   <Route path="/login"
                     element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
+                  />
+                  <Route path="/forgot-password"
+                    element={<ForgotPwd />}
                   />
                   <Route path="/signup"
                     element={<SignUp />}
@@ -107,7 +117,7 @@ function App() {
 
               </main>
               {/* <AboutUs/> */}
-              <ContactUs/>
+              {/* <ContactUs /> */}
               <Footer />
             </div>
           </Router>

@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import loginImage from '../Assets/p2.jpg'; // adjust path as needed
 
 
 export default function Login({ setIsLoggedIn, setUser }) {
     const [form, setForm] = useState({ email: "", password: "" });
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+
 
 
     const handleChange = (e) => {
@@ -55,8 +57,8 @@ export default function Login({ setIsLoggedIn, setUser }) {
 
                         {/* RIGHT SIDE - FORM */}<br></br>
                         <div className="col-md-6 bg-white p-5 rounded-end"><br></br>
-                            <h3 className="mb-4" style={{color:"red"}}>Login</h3>
-                            <form onSubmit={handleSubmit}>     <br></br>
+                            <h3 className="mb-4" style={{ color: "red" }}>Login</h3>
+                            <form onSubmit={handleSubmit}> <br></br>
                                 <div className="mb- text-start">
                                     <input type="email"
                                         name="email"
@@ -66,25 +68,37 @@ export default function Login({ setIsLoggedIn, setUser }) {
                                         placeholder="Enter email" />
                                 </div><br></br>
 
-                                <div className="mb-3 text-start">
-                                    <input type="password"
+                                <div className="mb-3 text-start d-flex">
+                                    <input type={showPassword ? "text" : "password"}
                                         name="password"
                                         className="form-control border-0 border-bottom rounded-0 shadow-none"
                                         onChange={handleChange}
                                         id="password"
                                         autoComplete="current-password"
-                                        placeholder="Enter password" />
+                                        placeholder="Enter password"
+                                    />
+                                    <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        style={{
+                                            right: "10px",
+                                            cursor: "pointer",
+                                            color: "#333"
+                                        }}
+                                    ></i>
                                 </div><br></br>
+
+                                <p className='mt-2 text-start'>
+                                    <Link to="/forgot-password" className='text-decoration-none bs-danger-bg-subtle' style={{ color: "red" }}>Forgot Password</Link>
+                                </p>
 
                                 <button type="submit" className="btn btn-danger w-100">Login</button>
                             </form>
                             <p className="mt-3 text-center">
-                                Does't have any account? <a href="/signup" className="text-decoration-none bs-danger-bg-subtle"style={{color:"red"}}>Sign Up here</a>
+                                Does't have any account? <a href="/signup" className="text-decoration-none bs-danger-bg-subtle" style={{ color: "red" }}>Sign Up here</a>
                             </p>
                         </div>
                     </div>
                 </div>
-
             </>
         </div>
     )
