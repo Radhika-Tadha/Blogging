@@ -90,7 +90,6 @@ export default function Login({ setIsLoggedIn, setUser }) {
                                 <p className='mt-2 text-start'>
                                     <Link to="/forgot-password" className='text-decoration-none bs-danger-bg-subtle' style={{ color: "red" }}>Forgot Password</Link>
                                 </p>
-
                                 <button type="submit" className="btn btn-danger w-100">Login</button>
                             </form>
                             <p className="mt-3 text-center">

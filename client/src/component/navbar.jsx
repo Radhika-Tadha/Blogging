@@ -14,7 +14,9 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn, user, setUser }) {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchTerm.trim() !== "") {
-            navigate(`/allblogs?search=${encodeURIComponent(searchTerm)}`);
+            navigate(`/AllBlogs?search=${encodeURIComponent(searchTerm)}`);
+        }else{
+            navigate('/AllBlogs');
         }
     };
 

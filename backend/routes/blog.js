@@ -152,7 +152,7 @@ router.get("/", async (req, res) => {
     const blogs = await Blog.find({
       $or: [
         { title: { $regex: search, $options: "i" } },
-        { description: { $regex: search, $options: "i" } }
+        { content: { $regex: search, $options: "i" } }
       ]
     }).populate("author", "name");
 

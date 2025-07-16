@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config();
+const cors = require('cors');// connect with froentend
+require('dotenv').config(); //url and secret key store
 
 const app = express();
 const cookieParser = require("cookie-parser");
